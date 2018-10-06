@@ -1,0 +1,23 @@
+#
+# Exposes information about the OpenStack environment via the $os_info associative
+# array.
+#
+
+# function os-info {
+
+local tenant
+local tenant_format
+local tenant_formatted
+
+unset os_info
+typeset -gA os_info
+
+[[ -n "${OS_TENANT_NAME+1}" ]] && tenant="[${OS_TENANT_NAME}]"
+
+if [[ "$tenant" != (none|) ]]; then
+  zstyle -s ':prezto:module:openstack:info:tenant' format 'tenant_format'
+  zformat -f tenant_formatted "$tenant_format" "s:$tenant"
+  os_info[tenant]="$tenant_formatted"
+fi
+
+# }

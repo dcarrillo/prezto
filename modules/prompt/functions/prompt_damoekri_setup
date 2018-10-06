@@ -27,6 +27,11 @@ prompt_damoekri_precmd() {
   if (( $+functions[ruby-info] )); then
     ruby-info
   fi
+
+  # Get Openstack tenant information.
+  if (( $+functions[os-info] )); then
+    os-info
+  fi
 }
 
 function prompt_damoekri_setup {
@@ -57,8 +62,11 @@ function prompt_damoekri_setup {
   # Set ruby-info parameters.
   zstyle ':prezto:module:ruby:info:version' format ' %F{yellow}%v%f'
 
+  # Set openstack tenant info
+  zstyle ':prezto:module:openstack:info:tenant' format '%s'
+
   # Define prompts.
-  PROMPT='%F{cyan}${_prompt_damoekri_pwd}%f${editor_info[keymap]} '
+  PROMPT='${os_info:+${os_info[tenant]} }%F{cyan}${_prompt_damoekri_pwd}%f${editor_info[keymap]} '
   RPROMPT='${git_info:+${(e)git_info[rprompt]}}${ruby_info:+${ruby_info[version]}}'
 }
 
