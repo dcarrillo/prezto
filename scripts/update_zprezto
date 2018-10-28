@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+set -ex
+
+cd ~/.zprezto
+
+git fetch upstream
+git checkout master
+git merge i -m "Merged" upstream/master
+git submodule update --init --recursive
+
+cd -
