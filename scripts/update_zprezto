@@ -6,7 +6,7 @@ cd ~/.zprezto
 
 git fetch upstream
 git checkout master
-git merge -m "Merged" upstream/master
+git merge -m "Merge upstream/master" upstream/master
 git submodule update --init --recursive
 
 cd -
