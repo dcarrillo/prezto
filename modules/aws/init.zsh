@@ -29,6 +29,11 @@ function aws_i {
                  InstanceType, VpcId, InstanceId, Placement.AvailabilityZone, PrivateIpAddress, PublicIpAddress]'
 }
 
+function aws_ebs {
+    aws ec2 describe-volumes ---profile $profile --output ${_aws_output} \
+        --query 'Volumes[*].{id:VolumeId,tag:Tags[0].Value,at:Attachments[0].InstanceId,size:Size}'
+}
+
 function aws_elb {
     local profile=$(_get_aws_profile)
     aws elb describe-load-balancers --profile $profile --output ${_aws_output} \
