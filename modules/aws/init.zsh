@@ -43,7 +43,7 @@ function aws_elb {
 function aws_elb2 {
     local profile=$(_get_aws_profile)
     aws elbv2 describe-load-balancers --profile $profile --output ${_aws_output} \
-        --query 'LoadBalancers[*].{dns:DNSName,vpc:VpcId,name:LoadBalancerName,subnets:AvailabilityZones[*].SubnetId}'
+        --query "LoadBalancers[*].{dns:DNSName,vpc:VpcId,name:LoadBalancerName,subnets:AvailabilityZones[*].SubnetId | join(',', @)}"
 }
 
 function aws_userdata {
