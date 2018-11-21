@@ -30,7 +30,8 @@ function aws_i {
 }
 
 function aws_ebs {
-    aws ec2 describe-volumes ---profile $profile --output ${_aws_output} \
+    local profile=$(_get_aws_profile)
+    aws ec2 describe-volumes --profile $profile --output ${_aws_output} \
         --query 'Volumes[*].{id:VolumeId,tag:Tags[0].Value,at:Attachments[0].InstanceId,size:Size}'
 }
 
