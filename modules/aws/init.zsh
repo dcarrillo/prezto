@@ -32,7 +32,7 @@ function aws_i {
 function aws_ebs {
     local profile=$(_get_aws_profile)
     aws ec2 describe-volumes --profile $profile --output ${_aws_output} \
-        --query 'Volumes[*].{id:VolumeId,tag:Tags[0].Value,at:Attachments[0].InstanceId,size:Size}'
+        --query 'Volumes[*].{id:VolumeId,tag:Tags[0].Value,at:Attachments[0].InstanceId,size:Size,AZ:AvailabilityZone}'
 }
 
 function aws_elb {
