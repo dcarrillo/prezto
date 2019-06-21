@@ -12,11 +12,11 @@ local tenant_formatted
 unset os_info
 typeset -gA os_info
 
-[[ -n "${OS_PROJECT_NAME+1}" ]] && tenant="[${OS_PROJECT_NAME}]"
+[[ -n "${OS_PROJECT_NAME+1}" ]] && tenant="${OS_PROJECT_NAME}"
 
 if [[ "$tenant" != (none|) ]]; then
   zstyle -s ':prezto:module:openstack:info:tenant' format 'tenant_format'
-  zformat -f tenant_formatted "$tenant_format" "s:$tenant"
+  zformat -f tenant_formatted "$tenant_format" "v:$tenant"
   os_info[tenant]="$tenant_formatted"
 fi
 
