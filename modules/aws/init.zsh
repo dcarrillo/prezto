@@ -71,3 +71,24 @@ function aws_ami {
     aws ec2 describe-images --profile $profile --output ${_aws_output} \
         --owner self --query 'Images[*].{id:ImageId,name:Name,virt:VirtualizationType,st:State}'
 }
+
+function aws_kms_decrypt {
+    local profile=$(_get_aws_profile)
+
+    if [[ -z $1 ]]; then
+        echo "String is missing"
+        return 1
+    fi
+    aws kms decrypt --ciphertext-blob fileb://<(base64 -d <<<$1) --output text --query Plaintext | base64 -d
+}
+
+function aws_ssm_session {
+    local profile=$(_get_aws_profile)
+
+    if [[ -z $1 ]]; then
+        echo "Target is missing"
+        return 1
+    fi
+    aws ssm start-session --target $1
+}
+
