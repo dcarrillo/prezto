@@ -51,7 +51,7 @@ function aws_userdata {
     local profile=$(_get_aws_profile)
     aws ec2 describe-instance-attribute --profile $profile --output text \
         --attribute userData --instance-id $1 \
-        --query 'UserData.Value' --profile $profile --output text | base64 -d
+        --query 'UserData.Value' | base64 -d
 }
 
 function aws_vpc {
@@ -79,16 +79,32 @@ function aws_kms_decrypt {
         echo "String is missing"
         return 1
     fi
-    aws kms decrypt --ciphertext-blob fileb://<(base64 -d <<<$1) --output text --query Plaintext | base64 -d
+    aws kms --profile $profile decrypt --ciphertext-blob fileb://<(base64 -d <<<$1) \
+        -output text --query Plaintext | base64 -d
 }
 
 function aws_ssm_session {
     local profile=$(_get_aws_profile)
 
     if [[ -z $1 ]]; then
-        echo "Target is missing"
+        echo "Instance id is missing"
         return 1
     fi
-    aws ssm start-session --target $1
+    aws ssm start-session --profile $profile --target $1
 }
 
+function aws_ssm_session_any {
+    local profile=$(_get_aws_profile)
+    local id
+
+    if [[ -z $1 ]]; then
+        echo "Instance name is missing"
+        return 1
+    fi
+
+    id=$(aws ec2 describe-instances --profile $profile --output text \
+        --filter "Name=tag-value,Values=$1" "Name=instance-state-name,Values=running" \
+        --query 'Reservations[0].Instances[0].InstanceId')
+
+    aws ssm start-session --profile $profile --target $id
+}
