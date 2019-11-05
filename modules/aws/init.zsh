@@ -80,7 +80,7 @@ function aws_kms_decrypt {
         return 1
     fi
     aws kms --profile $profile decrypt --ciphertext-blob fileb://<(base64 -d <<<$1) \
-        -output text --query Plaintext | base64 -d
+        --output text --query Plaintext | base64 -d
 }
 
 function aws_ssm_session {
