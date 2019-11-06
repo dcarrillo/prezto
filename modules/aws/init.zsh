@@ -38,13 +38,11 @@ function aws_ebs {
 function aws_elb {
     local profile=$(_get_aws_profile)
     aws elb describe-load-balancers --profile $profile --output ${_aws_output} \
-        --query 'LoadBalancerDescriptions[*].{chz:CanonicalHostedZoneName,vpc:VPCId,name:LoadBalancerName}'
-}
+        --query "LoadBalancerDescriptions[*].{type:'elb',scheme:Scheme,dns:DNSName,vpc:VPCId,name:LoadBalancerName,subnets:Subnets[*] | join(',', @)}"
 
-function aws_elb2 {
     local profile=$(_get_aws_profile)
     aws elbv2 describe-load-balancers --profile $profile --output ${_aws_output} \
-        --query "LoadBalancers[*].{dns:DNSName,vpc:VpcId,name:LoadBalancerName,subnets:AvailabilityZones[*].SubnetId | join(',', @)}"
+        --query "LoadBalancers[*].{type:Type,scheme:Scheme,dns:DNSName,vpc:VpcId,name:LoadBalancerName,subnets:AvailabilityZones[*].SubnetId | join(',', @)}"
 }
 
 function aws_userdata {
