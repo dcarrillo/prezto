@@ -108,6 +108,11 @@ function prompt_sorin_precmd {
     os-info
   fi
 
+  # Get AWS profile information.
+  if (( $+functions[aws-info] )); then
+    aws-info
+  fi
+
   prompt_sorin_async_tasks
 }
 
@@ -172,7 +177,7 @@ function prompt_sorin_setup {
 
   # Define prompts.
   PROMPT='${SSH_TTY:+"%F{9}%n%f%F{7}@%f%F{3}%m%f "}%F{4}${_prompt_sorin_pwd}%(!. %B%F{1}#%f%b.)${editor_info[keymap]} '
-  RPROMPT='${os_info:+${os_info[tenant]} }$python_info[virtualenv]${editor_info[overwrite]}%(?:: %F{1}'
+  RPROMPT='${os_info:+${os_info[tenant]} }${aws_info:+${aws_info[profile]} }$python_info[virtualenv]${editor_info[overwrite]}%(?:: %F{1}'
   RPROMPT+=${show_return}
   RPROMPT+='%f)${VIM:+" %B%F{6}V%f%b"}${_prompt_sorin_git}'
   SPROMPT='zsh: correct %F{1}%R%f to %F{2}%r%f [nyae]? '
