@@ -101,7 +101,7 @@ function aws_ssm_session_any {
     fi
 
     id=$(aws ec2 describe-instances --profile $profile --output text \
-        --filter "Name=tag-value,Values=$1" "Name=instance-state-name,Values=running" \
+        --filter "Name=tag:Name,Values=$1" "Name=instance-state-name,Values=running" \
         --query 'Reservations[0].Instances[0].InstanceId')
     if [[ $2 == "ssh" ]]; then
         AWS_PROFILE=$profile ssh $id
