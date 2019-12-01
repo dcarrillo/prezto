@@ -67,7 +67,7 @@ function aws_ag {
 function aws_ami {
     local profile=$(_get_aws_profile)
     aws ec2 describe-images --profile $profile --output ${_aws_output} \
-        --owner self --query 'Images[*].{id:ImageId,name:Name,virt:VirtualizationType,st:State}'
+        --owner self --query 'Images[*].{date:CreationDate,id:ImageId,name:Name,virt:VirtualizationType,st:State}'
 }
 
 function aws_kms_decrypt {
