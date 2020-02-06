@@ -110,6 +110,14 @@ function aws_ssm_session_any {
     fi
 }
 
+function aws_cf {
+    local profile=$(_get_aws_profile)
+
+    aws cloudfront list-distributions --profile $profile --output ${_aws_output} \
+        --query "DistributionList.Items[*].{id:Id,domain:DomainName,status:Status,
+                 origin:Origins.Items[].DomainName | join(' ', @), aliases:Aliases.Items | join(' ', @)}"
+}
+
 # ~/.ssh/config
 #
 # Host i-*
