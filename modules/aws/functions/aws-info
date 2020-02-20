@@ -12,9 +12,14 @@ unset aws_info
 typeset -gA aws_info
 
 
-if [[ -n "$AWS_PROFILE" ]]; then
+if (( ${+AWS_PROFILE} )); then
+  if (( ${+AWS_DEFAULT_REGION+1} )) && [[ ${_aws_region} = "true" ]]; then
+    AWS_REGION=$(cut -d "-" -f 1 <<<$AWS_DEFAULT_REGION | cut -b 1)$(cut -d "-" -f 2 <<<$AWS_DEFAULT_REGION | cut -b 1)$(cut -d "-" -f 3 <<<$AWS_DEFAULT_REGION | cut -b 1)
+    AWS_REGION_PROMPT=" $AWS_REGION"
+  fi
+
   zstyle -s ':prezto:module:aws:info:profile' format 'profile_format'
-  zformat -f profile_formatted "$profile_format" "v:${AWS_PROFILE:t}"
+  zformat -f profile_formatted "$profile_format" "v:${AWS_PROFILE:t}${AWS_REGION_PROMPT}"
   aws_info[profile]="$profile_formatted"
 fi
 

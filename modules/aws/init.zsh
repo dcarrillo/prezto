@@ -7,6 +7,7 @@
 
 # Get the output parameter
 zstyle -s ':prezto:module:aws' output '_aws_output' || _aws_output='table'
+zstyle -s ':prezto:module:aws' show_region '_aws_region' || _aws_region='false'
 zstyle -s ':prezto:module:aws' profile '_aws_profile' || _aws_profile='default'
 
 # Return if requirements are not found.
