@@ -13,7 +13,7 @@ typeset -gA aws_info
 
 
 if (( ${+AWS_PROFILE} )); then
-  if (( ${+AWS_DEFAULT_REGION+1} )) && [[ ${_aws_region} = "true" ]]; then
+  if (( ${+AWS_DEFAULT_REGION} )) && [[ ${_aws_region} = "true" ]]; then
     AWS_REGION=$(cut -d "-" -f 1 <<<$AWS_DEFAULT_REGION | cut -b 1)$(cut -d "-" -f 2 <<<$AWS_DEFAULT_REGION | cut -b 1)$(cut -d "-" -f 3 <<<$AWS_DEFAULT_REGION | cut -b 1)
     AWS_REGION_PROMPT=" $AWS_REGION"
   fi
