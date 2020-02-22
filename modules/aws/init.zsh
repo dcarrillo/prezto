@@ -127,3 +127,12 @@ function aws_cf {
 function ssh_aws_any {
     aws_ssm_session_any $1 ssh
 }
+
+function aws_switch_profile {
+    echo "Activating profile $1..."
+    export AWS_PROFILE=$1
+
+    if [[ -f ~/.aws/credentials ]]; then #&& (( ! ${+AWS_DEFAULT_REGION} ))
+      export AWS_DEFAULT_REGION=$(aws configure get region)
+    fi
+}

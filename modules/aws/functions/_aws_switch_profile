@@ -1,0 +1,13 @@
+#compdef aws_switch_profile
+#autoload
+
+if [[ ! -f ~/.aws/credentials ]]; then
+    return 1
+fi
+
+local profiles
+profiles=$(grep -E "^\[.+\]" ~/.aws/credentials | tr -d '[' | tr -d ']' )
+
+_arguments "1:toggle:((
+$profiles
+))" && return 0
