@@ -135,9 +135,14 @@ function ssh_aws_any {
 }
 
 function aws_switch_profile {
-    echo "Activating profile $1..."
     local region
 
+    if [[ -z $1 ]]; then
+        echo "Profile can't be an empty string"
+        return 1
+    fi
+
+    echo "Activating profile $1..."
     export AWS_PROFILE=$1
     if [[ -f ~/.aws/credentials ]]; then #&& (( ! ${+AWS_DEFAULT_REGION} ))
       region=$(aws configure get region)
@@ -147,4 +152,10 @@ function aws_switch_profile {
         unset AWS_DEFAULT_REGION
       fi
     fi
+}
+
+function aws_deactivate_profile {
+    echo "Deactivating aws profile..."
+    unset AWS_PROFILE
+    unset AWS_DEFAULT_REGION
 }
