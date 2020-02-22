@@ -114,9 +114,15 @@ function aws_ssm_session_any {
 function aws_cf {
     local profile=$(_get_aws_profile)
 
-    aws cloudfront list-distributions --profile $profile --output ${_aws_output} \
+    if ! type "jq" > /dev/null; then
+      echo "ERROR: this function needs jq to be installed"
+      return 1
+    fi
+
+    aws cloudfront list-distributions --profile $profile --output json \
         --query "DistributionList.Items[*].{id:Id,domain:DomainName,status:Status,
-                 origin:Origins.Items[].DomainName | join(' ', @), aliases:Aliases.Items | join(' ', @)}"
+                 origin:Origins.Items[].DomainName | join(' ', @), aliases:Aliases.Items | join(' ', @)}" \
+        | jq -r ".[] | [.id, .domain, .aliases, .status, .origin] | @csv" | tr -d '"' | column --separator="," --table
 }
 
 # ~/.ssh/config
