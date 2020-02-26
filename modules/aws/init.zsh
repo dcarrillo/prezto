@@ -62,7 +62,8 @@ function aws_vpc {
 function aws_subnets {
     local profile=$(_get_aws_profile)
     aws ec2 describe-subnets --profile $profile --output text \
-        --query 'Subnets[].[Tags[?Key==`Name`] | [0].Value, SubnetId, VpcId, CidrBlock]' | sort -k1
+        --query 'Subnets[].[Tags[?Key==`Name`] | [0].Value, SubnetId, VpcId, CidrBlock]' \
+        | sort -k1 | column -t
 }
 
 function aws_ag {
