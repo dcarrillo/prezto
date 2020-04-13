@@ -112,7 +112,8 @@ function aws_ssm_session_any {
         --filter "Name=tag:Name,Values=$1" "Name=instance-state-name,Values=running" \
         --query 'Reservations[0].Instances[0].InstanceId')
     if [[ $2 == "ssh" ]]; then
-        AWS_PROFILE=$profile ssh $id
+        shift 2
+        AWS_PROFILE=$profile ssh $id $@
     else
         aws ssm start-session --profile $profile --target $id
     fi
@@ -138,7 +139,10 @@ function aws_cf {
 #    ProxyCommand sh -c "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'"
 #    User <your_user>
 function ssh_aws_any {
-    aws_ssm_session_any $1 ssh
+    host=$1
+    shift
+    extra_params=$@
+    aws_ssm_session_any $host ssh $extra_params
 }
 
 function aws_switch_profile {
