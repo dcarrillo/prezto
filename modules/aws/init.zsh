@@ -154,6 +154,7 @@ function aws_switch_profile {
     fi
 
     echo "Activating profile $1..."
+    unset -m "AWS_*"
     export AWS_PROFILE=$1
     if [[ -f ~/.aws/credentials ]]; then #&& (( ! ${+AWS_DEFAULT_REGION} ))
       region=$(aws configure get region)
@@ -167,6 +168,5 @@ function aws_switch_profile {
 
 function aws_deactivate_profile {
     echo "Deactivating aws profile..."
-    unset AWS_PROFILE
-    unset AWS_DEFAULT_REGION
+    unset -m "AWS_*"
 }
