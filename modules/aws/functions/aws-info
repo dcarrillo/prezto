@@ -14,14 +14,14 @@ unset aws_info
 typeset -gA aws_info
 
 if (( ${+AWS_SECRET_ACCESS_KEY} )); then
-  aws_prompt='ACCESS_KEY'
+  aws_prompt="${AWS_PROFILE}  "
 elif (( ${+AWS_PROFILE} )); then
     aws_prompt=$AWS_PROFILE
+fi
 
-    if (( ${+AWS_DEFAULT_REGION} )) && [[ ${_aws_region} = "true" ]]; then
-      AWS_REGION=$(cut -d "-" -f 1 <<<$AWS_DEFAULT_REGION | cut -b 1)$(cut -d "-" -f 2 <<<$AWS_DEFAULT_REGION | cut -b 1)$(cut -d "-" -f 3 <<<$AWS_DEFAULT_REGION | cut -b 1)
-      aws_region_prompt=" $AWS_REGION"
-    fi
+if (( ${+AWS_DEFAULT_REGION} )) && [[ ${_aws_region} = "true" ]]; then
+  AWS_REGION=$(cut -d "-" -f 1 <<<$AWS_DEFAULT_REGION | cut -b 1)$(cut -d "-" -f 2 <<<$AWS_DEFAULT_REGION | cut -b 1)$(cut -d "-" -f 3 <<<$AWS_DEFAULT_REGION | cut -b 1)
+  aws_region_prompt=" $AWS_REGION"
 fi
 
 if (( ${+AWS_SECRET_ACCESS_KEY} )) || (( ${+AWS_DEFAULT_REGION} )); then
