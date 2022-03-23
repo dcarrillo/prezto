@@ -9,6 +9,7 @@
 zstyle -s ':prezto:module:aws' output '_aws_output' || _aws_output='table'
 zstyle -s ':prezto:module:aws' show_region '_aws_region' || _aws_region='false'
 zstyle -s ':prezto:module:aws' profile '_aws_profile' || _aws_profile='default'
+zstyle -s ':prezto:module:aws' sso '_aws_sso' || _aws_sso='false'
 
 # Return if requirements are not found.
 if (( ! $+commands[aws] )); then
@@ -162,6 +163,10 @@ function aws_switch_profile {
         export AWS_DEFAULT_REGION=$region
       else
         unset AWS_DEFAULT_REGION
+      fi
+
+      if [[ ${_aws_sso} == "true" ]]; then
+        eval $(aws-export-credentials --env-export)
       fi
     fi
 }
