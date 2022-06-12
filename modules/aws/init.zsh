@@ -148,6 +148,7 @@ function ssh_aws_any {
 
 function aws_switch_profile {
     local region
+    local credentials
 
     if [[ -z $1 ]]; then
         echo "Profile can't be an empty string"
@@ -166,7 +167,14 @@ function aws_switch_profile {
       fi
 
       if [[ ${_aws_sso} == "true" ]]; then
-        eval $(aws-export-credentials --env-export)
+        credentials=$(aws-export-credentials --env-export 2>&1)
+
+        if [[ $credentials =~ "has expired" ]]; then
+            aws sso login
+            credentials=$(aws-export-credentials --env-export)
+        fi
+
+        eval $credentials
       fi
     fi
 }
