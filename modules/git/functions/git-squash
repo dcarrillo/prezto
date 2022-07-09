@@ -1,0 +1,26 @@
+#
+# Performs a "dirty" squash
+#
+# Authors:
+#   Daniel Carrillo <daniel.carrillo@gmail.com>
+#
+
+# function git-squash {
+
+if ! is-true "$(command git rev-parse --is-inside-work-tree 2> /dev/null)"; then
+  print "$0: not a repository work tree: $PWD" >&2
+  return 1
+elif [ -z "$2" ]; then
+  print "Usage: $0 <base branch> \"commit message\"" >&2
+  return 1
+fi
+
+local bbranch=$1
+local message=$2
+local cbranch=$(git branch --show-current)
+
+git reset $(git merge-base $bbranch $cbranch)
+git add -A
+git commit -m "$message"
+
+# }
