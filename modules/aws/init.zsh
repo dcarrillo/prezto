@@ -120,6 +120,20 @@ function aws_ssm_session_any {
     fi
 }
 
+function aws_ssm_parameters {
+    local profile=$(_get_aws_profile)
+    aws ssm describe-parameters --profile $profile --output ${_aws_output} \
+        --query 'Parameters[].[Name,Type]'
+}
+
+function aws_ssm_get_parameter {
+    local profile=$(_get_aws_profile)
+    local parameter=$1
+
+    aws ssm get-parameter --profile $profile --output text \
+        --name $parameter --with-decryption --query "Parameter.Value"
+}
+
 function aws_cf {
     local profile=$(_get_aws_profile)
 
