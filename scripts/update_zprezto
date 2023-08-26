@@ -2,15 +2,18 @@
 
 set -ex
 
-OLDDIR=$PWD
-cd ~/.zprezto
+pushd ~/.zprezto
 
 git fetch upstream
 git checkout master
 git merge -m "Merge upstream/master" upstream/master
 git submodule update --init --recursive
 
-cd ~/.zprezto/contrib/fzf-tab
-git pull
+cd contrib
+for dir in $(fd -t directory --exact-depth=1); do
+  pushd $dir
+  git pull
+  popd
+done
 
-cd $OLDDIR
+popd
