@@ -148,6 +148,15 @@ function aws_cf {
         | jq -r ".[] | [.id, .domain, .aliases, .status, .origin] | @csv" | tr -d '"' | column --separator="," --table
 }
 
+function aws_eks {
+    local profile=$(_get_aws_profile)
+
+    for cluster in $(aws eks list-clusters --output text --query 'clusters'); do
+        aws eks describe-cluster --name $cluster --output ${_aws_output} \
+          --query "cluster.{name:name,endpoint:endpoint,access:resourcesVpcConfig.publicAccessCidrs | join(' ',@),issues:health.issues | join(' ',@)}"
+    done
+}
+
 # ~/.ssh/config
 #
 # Host i-*
