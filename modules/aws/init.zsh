@@ -190,11 +190,11 @@ function aws_switch_profile {
       fi
 
       if [[ ${_aws_sso} == "true" ]]; then
-        credentials=$(aws-export-credentials --env-export 2>&1)
+        credentials=$(aws configure export-credentials --format env 2>&1)
 
         if [[ $credentials =~ "has expired" ]]; then
             aws sso login
-            credentials=$(aws-export-credentials --env-export)
+            credentials=$(aws configure export-credentials --format env)
         fi
 
         eval $credentials
